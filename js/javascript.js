@@ -15,32 +15,30 @@ const borrarEntradas = document.querySelector("#Borrar-entrada");
 const borrarTodos = document.querySelector("#Borrar-todo");
 const eliminar = document.querySelector("#eliminar");
 
-// Metodo forEach() [Arrays]
-botonesNumeros.forEach(boton => {
-    boton.addEventListener("click", () => {
-        mostrarNumeroPantalla(boton.textContent);
-    });
-});
-
-botonesOperador.forEach(boton => {
-    boton.addEventListener("click", () => {
-        manejarOperador(boton.textContent);
-    });
-});
-
-eliminar.addEventListener("click", retroceder)
-borrarTodos.addEventListener("click", borrarTodo);
-borrarEntradas.addEventListener("click", borrarEntrada);
-botonDecimal.addEventListener("click", mostrarPuntoPantalla)
-botonIgual.addEventListener("click", calcularOperacion);
-
 /**
  * @brief Ejecuta la inicialización de la calculadora una vez que el DOM está completamente cargado.
  *
  * Esta función prepara todo lo necesario para que la calculadora funciones, incluyendo la configuración de la interfaz, los valores iniciales de las variables necesarias y la vinculación de eventos a los controles.
  *
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {// Metodo forEach() [Arrays]
+    botonesNumeros.forEach(boton => {
+        boton.addEventListener("click", () => {
+            mostrarNumeroPantalla(boton.textContent);
+        });
+    });
+
+    botonesOperador.forEach(boton => {
+        boton.addEventListener("click", () => {
+            manejarOperador(boton.textContent);
+        });
+    });
+
+    eliminar.addEventListener("click", retroceder)
+    borrarTodos.addEventListener("click", borrarTodo);
+    borrarEntradas.addEventListener("click", borrarEntrada);
+    botonDecimal.addEventListener("click", mostrarPuntoPantalla)
+    botonIgual.addEventListener("click", calcularOperacion);
 });
 
 /**
@@ -80,8 +78,13 @@ function habilitarPunto() {
 *
 */
 function actualizarPantalla() {
-    while (valorAct.length > 12) {
-        valorAct = valorAct.slice(0, -1);
+    while (valorAct.length > 12 || !isFinite(parseFloat(valorAct))) {
+        if (!String(valorAct).includes(".")) {
+            valorAct = valorAct.slice(0, -1);
+        }
+        else {
+            valorAct = Math.round(valorAct);
+        }
     }
     if (!String(valorAct).includes(".")) {
         habilitarPunto();
@@ -310,4 +313,12 @@ function aplicarColorResultado(operador) {
  */
 
 window.addEventListener('keydown', (teclaevento) => {
+    switch (teclaevento.key.toLowerCase()) {
+        case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
+            mostrarNumeroPantalla(teclaevento.key);
+            break;
+
+        default:
+            break;
+    }
 });
