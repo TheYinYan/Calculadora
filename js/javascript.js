@@ -379,6 +379,6 @@ window.addEventListener('keydown', (teclaevento) => {
             borrarTodo();
             break;
         case 'i': case 's': case 'r':
-            operacionInmediata(teclaevento.key)
+            operacionInmediata(teclaevento.key);
     }
 });
