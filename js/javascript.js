@@ -92,7 +92,7 @@ function actualizarPantalla() {
     if (!String(valorAct).includes(".")) {
         habilitarPunto();
     }
-    else{
+    else {
         deshabilitarPunto()
     }
     pantalla.textContent = valorAct;
@@ -113,15 +113,21 @@ function actualizarPantalla() {
  */
 function mostrarNumeroPantalla(numero) {
     pantallaColorNormal();
-    if (resultadoMostrado) {
-        pantalla.textContent = valorAct;
-        resultadoMostrado = false;
 
-    } else if (valorAct === "0") {
+    if (resultadoMostrado) {
+        // Si se acaba de mostrar un resultado, empezar NUEVA operación con este número
         valorAct = numero;
-    } else {
+        resultadoMostrado = false;  // Importante: quitar la bandera
+        operadorAct = null;          // Limpiar operador pendiente
+        valorAnt = null;             // Limpiar valor anterior
+    } else if (valorAct === "0") {
+        // Si el valor actual es "0", reemplazarlo
+        valorAct = numero;
+    } else if (valorAct !== "0") {
+        // Si no es cero y no es resultado, concatenar
         valorAct += numero;
     }
+
     actualizarPantalla();
 }
 
@@ -194,9 +200,13 @@ function calcularOperacion() {
             break;
     }
     valorAct = resultado;
+
     aplicarColorResultado(operadorAct);
     actualizarPantalla();
     resultadoMostrado = true;
+    operadorAct = null;        // Limpiar operador actual
+    valorAnt = null;
+
 }
 
 /**
@@ -359,17 +369,17 @@ function aplicarColorResultado(operador) {
  */
 
 window.addEventListener('keydown', (teclaevento) => {
-    switch (teclaevento.key.toLowerCase()) {
+    switch (teclaevento.key.toLocaleLowerCase()) {
         case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
             mostrarNumeroPantalla(teclaevento.key);
             break;
         case '.':
             mostrarPuntoPantalla();
             break;
-        case '+': case '-': case '*': case '/':
+        case '+': case '-': case 'x': case '/':
             manejarOperador(teclaevento.key);
             break;
-        case '=':case 'enter':
+        case '=': case 'enter':
             calcularOperacion();
             break;
         case 'backspace':
